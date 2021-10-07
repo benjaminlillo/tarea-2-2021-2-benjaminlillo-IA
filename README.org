@@ -1,0 +1,6 @@
+#+Title: IIC2613 - Tarea 2
+#+language: es
+
+Este repo tiene el código base de la tarea 2.
+
+Para dudas de la tarea, prefieran agregar [[https://github.com/IIC2613-Inteligencia-Artificial-2021-2/Syllabus/issues][agregar issues]] en Syllabus.
