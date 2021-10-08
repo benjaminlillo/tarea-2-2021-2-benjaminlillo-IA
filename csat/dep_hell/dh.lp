@@ -30,19 +30,6 @@ version(Library, VersionNumber) :- installed(Library, VersionNumber).
 % asegurar que se busca un programa en el goal
 program(Program) :- wants(Program).
 
-% { a(Program) : program(Program) , wants(Program) } = 1.
-a(Program) :- program(Program).
-
-% un programa es compatible con la version de una libreria si es que el programa requiere al menos una version del programa y la version es mayor o igual al minimo requerido
-% isCompatible(Program, Library, VersionNumber) :- program(Program) , version(Library, VersionNumber) , requiresAtLeast(Program, Library, MinVersion) , VersionNumber >= MinVersion.
-
-% lo mismo pero para cuando se especifica requires at most
-% isCompatible(Program, Library, VersionNumber) :- program(Program) , version(Library, VersionNumber) , requiresAtMost(Program, Library, MaxVersion) , VersionNumber <= MaxVersion.
-
-% sacar del modelo casos donde existe un tope de version compatible y ademas un minimo
-% :- isCompatible(Program, Library, VersionNumber) , requiresAtLeast(Program, Library, MinVersion) , VersionNumber < MinVersion.
-% :- isCompatible(Program, Library, VersionNumber) , requiresAtMost(Program, Library, MaxVersion) , VersionNumber > MaxVersion.
-
 % si se quiere instalar un programa que requiere desde una version de una libreria, sugerir instalar alguna version que sirva y no este instalada
 { shouldInstall(Library, VersionNumber) : version(Library, VersionNumber) , VersionNumber >= MinVersion , not installed(Library, VersionNumber) }  :- wants(Program), requiresAtLeast(Program, Library, MinVersion).
 
@@ -55,4 +42,9 @@ a(Program) :- program(Program).
 % lo mismo para requires at most
 :- shouldInstall(Library, VersionNumber) , wants(Program) , requiresAtMost(Program, Library, MaxVersion) , VersionNumber > MaxVersion.
 
-% TODO: Define the model
+% asegurar que se usen las librerias mas nuevas posibles:
+% el modelo óptimo será el modelo donde se sugiera instalar la librería no instalada de mayor VersionNumber, y donde se maximice tambien
+% la libreria instalada de mayor VersionNumber
+#maximize{VersionNumberShouldInstall , VersionNumberInstalled : shouldInstall(Library, VersionNumberShouldInstall) , installed(Library, VersionNumberInstalled)}.
+% el modelo optimo sera el que sugiere eliminar las librerias mas antiguas
+#minimize{VersionNumberShouldDelete : shouldDelete(Library, VersionNumberShouldDelete)}.
