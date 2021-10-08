@@ -55,7 +55,4 @@ a(Program) :- program(Program).
 % lo mismo para requires at most
 :- shouldInstall(Library, VersionNumber) , wants(Program) , requiresAtMost(Program, Library, MaxVersion) , VersionNumber > MaxVersion.
 
-
-
-
 % TODO: Define the model
